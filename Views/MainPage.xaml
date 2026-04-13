@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             xmlns:conv="clr-namespace:DailyBibleVerseApp.Converters"
+             xmlns:ctrl="clr-namespace:DailyBibleVerseApp.Controls"
+             x:Class="DailyBibleVerseApp.Views.MainPage"
+             x:DataType="vm:BibleVerseViewModel"
+             Title="Search">
+
+    <ContentPage.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBool"/>
+        <conv:StringToBoolConverter x:Key="StringToBool"/>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Grid BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}"
+                  Padding="24,48,24,32">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="SEARCH SCRIPTURE" Style="{StaticResource SectionTitle}"
+                           TextColor="#9BA3C2"/>
+                    <Label Text="Look Up a Verse" Style="{StaticResource PageTitle}"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Padding="20" Spacing="16" Margin="0,-16,0,0">
+
+                <!-- Search form card -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="14">
+
+                        <!-- Error -->
+                        <Border BackgroundColor="#FEE2E2" Padding="12,10"
+                                IsVisible="{Binding HasError}" StrokeThickness="0">
+                            <Label Text="{Binding ErrorMessage}" TextColor="#DC2626" FontSize="13"/>
+                        </Border>
+
+                        <!-- Book picker -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="📖  BOOK" Style="{StaticResource SectionTitle}"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Picker Title="Select a book of the Bible"
+                                        ItemsSource="{Binding BibleBooks}"
+                                        SelectedItem="{Binding SelectedBook}"
+                                        Margin="8,0"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Chapter + Verse row -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label Text="📑  CHAPTER" Style="{StaticResource SectionTitle}"/>
+                                <Border Style="{StaticResource InputBorder}">
+                                    <Entry Placeholder="e.g. 3" Text="{Binding ChapterText}"
+                                           Keyboard="Numeric" Margin="8,0"/>
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label Text="🔢  VERSE" Style="{StaticResource SectionTitle}"/>
+                                <Border Style="{StaticResource InputBorder}">
+                                    <Entry Placeholder="e.g. 16" Text="{Binding VerseNumberText}"
+                                           Keyboard="Numeric" Margin="8,0"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Translation -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="🌐  TRANSLATION" Style="{StaticResource SectionTitle}"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Picker ItemsSource="{Binding Versions}"
+                                        SelectedItem="{Binding SelectedVersion}"
+                                        Margin="8,0"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Load button -->
+                        <Button Text="🔍  Load Verse" Command="{Binding LoadVerseCommand}"
+                                Margin="0,4,0,0"/>
+
+                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                           HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Result card — only shown when verse loaded -->
+                <Border Style="{StaticResource AccentCard}"
+                        IsVisible="{Binding VerseReference, Converter={StaticResource StringToBool}}">
+                    <VerticalStackLayout Spacing="14">
+
+                        <!-- Reference pill -->
+                        <Border BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                                StrokeThickness="0" HorizontalOptions="Start" Padding="10,5">
+                            <Label Text="{Binding VerseReference}"
+                                   FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource Primary}"/>
+                        </Border>
+
+                        <Label Text="{Binding VerseText}" Style="{StaticResource VerseText}"/>
+
+                        <BoxView Style="{StaticResource Divider}"/>
+
+                        <!-- Actions -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Button Grid.Column="0" Text="❤️  Save"
+                                    Command="{Binding SaveFavouriteCommand}"
+                                    Style="{StaticResource SecondaryButton}"/>
+                            <Button Grid.Column="1" Text="📤  Share"
+                                    Command="{Binding ShareVerseCommand}"/>
+                        </Grid>
+                        <Button Text="📝  Add to Notes" Command="{Binding GoToNotesCommand}"
+                                Style="{StaticResource SecondaryButton}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

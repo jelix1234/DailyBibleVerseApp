@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DailyBibleVerseApp.Views.SignupPage"
+             Title="Sign Up"
+             Shell.NavBarIsVisible="False">
+    <!-- SignupPage redirects to LoginPage (which has register toggle built in).
+         This page kept for route compatibility only. -->
+    <VerticalStackLayout Padding="40" Spacing="16" VerticalOptions="Center">
+        <ActivityIndicator IsRunning="True" Color="#1A237E" HorizontalOptions="Center"/>
+        <Label Text="Redirecting to login..." 
+               HorizontalOptions="Center" TextColor="Gray" FontSize="14"/>
+    </VerticalStackLayout>
+</ContentPage>

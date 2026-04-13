@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:DailyBibleVerseApp.Views"
+       x:Class="DailyBibleVerseApp.AppShell"
+       Shell.NavBarIsVisible="False">
+
+    <TabBar>
+        <ShellContent Title="Daily"   Icon="calendar.png" ContentTemplate="{DataTemplate views:DailyVersePage}" Route="DailyVersePage"/>
+        <ShellContent Title="Search"  Icon="bible.png"    ContentTemplate="{DataTemplate views:MainPage}"       Route="MainPage"/>
+        <ShellContent Title="Saved"   Icon="heart.png"    ContentTemplate="{DataTemplate views:FavoritesPage}"  Route="FavoritesPage"/>
+        <ShellContent Title="Notes"   Icon="note.png"     ContentTemplate="{DataTemplate views:NotesPage}"      Route="NotesPage"/>
+        <ShellContent Title="Account" Icon="settings.png" ContentTemplate="{DataTemplate views:SettingsPage}"   Route="SettingsPage"/>
+    </TabBar>
+
+</Shell>

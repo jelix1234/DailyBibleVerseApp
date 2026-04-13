@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             xmlns:models="clr-namespace:DailyBibleVerseApp.Models"
+             xmlns:conv="clr-namespace:DailyBibleVerseApp.Converters"
+             x:Class="DailyBibleVerseApp.Views.NotesPage"
+             x:DataType="vm:NotesViewModel"
+             Title="Notes">
+
+    <ContentPage.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBool"/>
+        <conv:TruncateTextConverter x:Key="Truncate"/>
+        <conv:StringToBoolConverter x:Key="StringToBool"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}"
+              Padding="24,48,24,24">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="PERSONAL NOTES" Style="{StaticResource SectionTitle}"
+                           TextColor="#9BA3C2"/>
+                    <Label Text="My Notes" Style="{StaticResource PageTitle}"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="＋ New"
+                        Command="{Binding PrepareNewNoteCommand}"
+                        BackgroundColor="{StaticResource Accent}"
+                        TextColor="White" CornerRadius="20"
+                        Padding="16,8" FontSize="13"
+                        VerticalOptions="End"/>
+            </Grid>
+        </Grid>
+
+        <!-- Search bar -->
+        <Border Grid.Row="1" Margin="20,12,20,4" Style="{StaticResource InputBorder}">
+            <Grid ColumnDefinitions="Auto,*">
+                <Label Grid.Column="0" Text="🔍" FontSize="16" Margin="10,0,4,0"
+                       VerticalOptions="Center"
+                       TextColor="{StaticResource TextSecondary}"/>
+                <Entry Grid.Column="1" Placeholder="Search your notes…"
+                       Text="{Binding SearchText}"
+                       ReturnCommand="{Binding SearchCommand}"
+                       Margin="0,0,8,0"/>
+            </Grid>
+        </Border>
+
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Padding="20,8" Spacing="0">
+
+                <!-- Add/Edit form -->
+                <Border Style="{StaticResource AccentCard}" Margin="0,0,0,16"
+                        IsVisible="{Binding NoteTitle, Converter={StaticResource StringToBool}}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="{Binding IsEditing, Converter={StaticResource InverseBool}, ConverterParameter='New Note|Edit Note'}"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry Placeholder="Note title *" Text="{Binding NoteTitle}" Margin="8,0"/>
+                        </Border>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Editor Placeholder="Write your thoughts…" Text="{Binding NoteContent}"
+                                    AutoSize="TextChanges" MinimumHeightRequest="100"
+                                    Margin="8,4"/>
+                        </Border>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry Placeholder="📖 Linked verse (e.g. John 3:16)"
+                                   Text="{Binding LinkedVerse}" Margin="8,0"/>
+                        </Border>
+
+                        <Border BackgroundColor="#FEE2E2" Padding="10,8"
+                                IsVisible="{Binding HasError}" StrokeThickness="0">
+                            <Label Text="{Binding ErrorMessage}" TextColor="#DC2626" FontSize="13"/>
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <Button Grid.Column="0" Text="💾  Save Note"
+                                    Command="{Binding SaveNoteCommand}"/>
+                            <Button Grid.Column="1" Text="Cancel"
+                                    Command="{Binding PrepareNewNoteCommand}"
+                                    Style="{StaticResource SecondaryButton}"
+                                    WidthRequest="100"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- New note prompt (when form hidden) -->
+                <Border BackgroundColor="{AppThemeBinding Light=#FFF8E7, Dark=#2A2000}"
+                        Stroke="{AppThemeBinding Light=#F5A623, Dark=#7A5500}"
+                        StrokeThickness="1" Margin="0,0,0,16"
+                        IsVisible="{Binding NoteTitle, Converter={StaticResource InverseBool}}">
+                    <HorizontalStackLayout Spacing="12" Padding="4,0">
+                        <Label Text="✍️" FontSize="18" VerticalOptions="Center"/>
+                        <Label Text="Tap '＋ New' above to write a note linked to any verse."
+                               FontSize="13" TextColor="{AppThemeBinding Light=#7A5500, Dark=#FFD080}"
+                               VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Empty state -->
+                <VerticalStackLayout IsVisible="{Binding IsEmpty}"
+                                     HorizontalOptions="Center" Spacing="16" Margin="0,40,0,0">
+                    <Border BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                            WidthRequest="100" HeightRequest="100"
+                            HorizontalOptions="Center" StrokeThickness="0">
+                        <Label Text="📝" FontSize="44" HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+                    <Label Text="No notes yet" FontSize="18" FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                    <Label Text="Tap '＋ New' to write your first note"
+                           FontSize="14" HorizontalOptions="Center"
+                           TextColor="{StaticResource TextSecondary}"/>
+                </VerticalStackLayout>
+
+                <!-- Notes list -->
+                <CollectionView ItemsSource="{Binding Notes}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Note">
+                            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                                <VerticalStackLayout Spacing="10">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0" Text="{Binding Title}"
+                                               FontSize="16" FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding UpdatedAt, StringFormat='{0:MMM d}'}"
+                                               Style="{StaticResource MutedText}"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <Label Text="{Binding Text, Converter={StaticResource Truncate}, ConverterParameter='100'}"
+                                           Style="{StaticResource BodyText}"
+                                           LineBreakMode="WordWrap"/>
+
+                                    <!-- Linked verse badge -->
+                                    <Border BackgroundColor="{AppThemeBinding Light=#FFF8E7, Dark=#2A2000}"
+                                            StrokeThickness="0" HorizontalOptions="Start" Padding="10,4"
+                                            IsVisible="{Binding LinkedVerse, Converter={StaticResource StringToBool}}">
+                                        <Label Text="{Binding LinkedVerse, StringFormat='📖 {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#7A5500, Dark=#FFD080}"/>
+                                    </Border>
+
+                                    <BoxView Style="{StaticResource Divider}"/>
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding CreatedAt, StringFormat='Created {0:MMM d, yyyy}'}"
+                                               Style="{StaticResource MutedText}" FontSize="11"
+                                               VerticalOptions="Center"/>
+                                        <Button Grid.Column="1" Text="✏️  Edit"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NotesViewModel}}, Path=PrepareEditNoteCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Transparent"
+                                                TextColor="{StaticResource Primary}"
+                                                FontSize="13" Padding="0"/>
+                                        <Button Grid.Column="2" Text="🗑️  Delete"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NotesViewModel}}, Path=DeleteNoteCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Transparent"
+                                                TextColor="{StaticResource Error}"
+                                                FontSize="13" Padding="0"/>
+                                    </Grid>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

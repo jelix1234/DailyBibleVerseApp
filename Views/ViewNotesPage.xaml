@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DailyBibleVerseApp.Views.ViewNotesPage"
+             Title="Notes">
+    <VerticalStackLayout Padding="20" Spacing="12">
+        <Label Text="Saved Notes" FontSize="22" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+        <ListView x:Name="NotesListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Text}" Detail="{Binding CreatedAt, StringFormat='{0:MMM d, yyyy}'}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

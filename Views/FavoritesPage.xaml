@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             xmlns:models="clr-namespace:DailyBibleVerseApp.Models"
+             xmlns:conv="clr-namespace:DailyBibleVerseApp.Converters"
+             x:Class="DailyBibleVerseApp.Views.FavoritesPage"
+             x:DataType="vm:FavouritesViewModel"
+             Title="Saved">
+
+    <ContentPage.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBool"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}"
+              Padding="24,48,24,24">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="COLLECTION" Style="{StaticResource SectionTitle}"
+                           TextColor="#9BA3C2"/>
+                    <Label Text="Saved Verses" Style="{StaticResource PageTitle}"
+                           TextColor="White"/>
+                    <Label Text="{Binding Favourites.Count, StringFormat='{0} verse(s) saved'}"
+                           FontSize="13" TextColor="#9BA3C2"/>
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="Clear All"
+                        Command="{Binding ClearAllCommand}"
+                        IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}"
+                        BackgroundColor="#FFFFFF22" TextColor="White"
+                        CornerRadius="20" Padding="16,8" FontSize="12"
+                        VerticalOptions="End"/>
+            </Grid>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,16" Spacing="0">
+
+                <!-- Empty state -->
+                <VerticalStackLayout IsVisible="{Binding IsEmpty}"
+                                     HorizontalOptions="Center" VerticalOptions="Center"
+                                     Spacing="16" Margin="0,60,0,0">
+                    <Border BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                            WidthRequest="100" HeightRequest="100"
+                            HorizontalOptions="Center" StrokeThickness="0">
+                        <Label Text="❤️" FontSize="44" HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+                    <Label Text="No saved verses yet" FontSize="18" FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                    <Label Text="Tap ❤️ Save on any verse to collect it here"
+                           FontSize="14" HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource TextSecondary}"/>
+                </VerticalStackLayout>
+
+                <!-- Favourites list -->
+                <CollectionView ItemsSource="{Binding Favourites}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:FavoriteVerse">
+                            <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                                <VerticalStackLayout Spacing="12">
+
+                                    <!-- Top row: reference + date -->
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Border Grid.Column="0"
+                                                BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                                                StrokeThickness="0" HorizontalOptions="Start" Padding="10,4">
+                                            <Label Text="{Binding Reference}"
+                                                   FontSize="12" FontAttributes="Bold"
+                                                   TextColor="{StaticResource Primary}"/>
+                                        </Border>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding SavedAt, StringFormat='{0:MMM d, yyyy}'}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <!-- Verse text -->
+                                    <Label Text="{Binding VerseText}"
+                                           Style="{StaticResource BodyText}"
+                                           FontAttributes="Italic"
+                                           LineBreakMode="WordWrap"/>
+
+                                    <BoxView Style="{StaticResource Divider}"/>
+
+                                    <!-- Actions -->
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                        <Button Grid.Column="0" Text="📤  Share"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavouritesViewModel}}, Path=ShareCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Style="{StaticResource SecondaryButton}"
+                                                FontSize="13" Padding="12,10"/>
+                                        <Button Grid.Column="1" Text="🗑️  Remove"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavouritesViewModel}}, Path=DeleteCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Style="{StaticResource DangerButton}"
+                                                FontSize="13" Padding="12,10"/>
+                                    </Grid>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

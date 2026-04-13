@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             xmlns:ctrl="clr-namespace:DailyBibleVerseApp.Controls"
+             x:Class="DailyBibleVerseApp.Views.DailyVersePage"
+             x:DataType="vm:BibleVerseViewModel"
+             Title="Daily">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Gradient header -->
+            <Grid BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}"
+                  Padding="24,48,24,32">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="TODAY'S VERSE" Style="{StaticResource SectionTitle}"
+                           TextColor="#9BA3C2"/>
+                    <Label Text="Daily Scripture" Style="{StaticResource PageTitle}"
+                           TextColor="White"/>
+                    <Label x:Name="DateLabel"
+                           FontSize="13" TextColor="#9BA3C2"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Padding="20" Spacing="16"
+                                 Margin="0,-16,0,0">
+
+                <!-- Loading -->
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                   HorizontalOptions="Center" Margin="20"/>
+
+                <!-- Main verse card -->
+                <Border Style="{StaticResource AccentCard}">
+                    <VerticalStackLayout Spacing="16">
+                        <!-- Big quote mark -->
+                        <Label Text="❝" FontSize="52"
+                               TextColor="{AppThemeBinding Light=#D4D8FF, Dark=#353A80}"
+                               Margin="0,-10,0,-20" HorizontalOptions="Start"/>
+
+                        <Label Text="{Binding DailyVerseText}"
+                               Style="{StaticResource VerseText}"
+                               HorizontalTextAlignment="Center"/>
+
+                        <BoxView Style="{StaticResource Divider}"/>
+
+                        <Label Text="{Binding DailyVerseReference}"
+                               Style="{StaticResource ReferenceText}"
+                               HorizontalOptions="End"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Action buttons -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" Text="🔁  New Verse"
+                            Command="{Binding LoadRandomVerseCommand}"
+                            Style="{StaticResource SecondaryButton}"/>
+                    <Button Grid.Column="1" Text="📤  Share"
+                            Command="{Binding ShareVerseCommand}"/>
+                </Grid>
+
+                <!-- Translation card -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="BIBLE TRANSLATION" Style="{StaticResource SectionTitle}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Picker ItemsSource="{Binding Versions}"
+                                    SelectedItem="{Binding SelectedVersion}"
+                                    Margin="8,0"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Tip card -->
+                <Border BackgroundColor="{AppThemeBinding Light=#FFF8E7, Dark=#2A2000}"
+                        Stroke="{AppThemeBinding Light=#F5A623, Dark=#7A5500}"
+                        StrokeThickness="1">
+                    <HorizontalStackLayout Spacing="12" Padding="4,0">
+                        <Label Text="💡" FontSize="20" VerticalOptions="Center"/>
+                        <Label Text="A new verse rotates in every day. Come back tomorrow!"
+                               FontSize="13" TextColor="{AppThemeBinding Light=#7A5500, Dark=#FFD080}"
+                               VerticalOptions="Center" LineBreakMode="WordWrap"
+                               HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             x:Class="DailyBibleVerseApp.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             Title="Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Grid BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}"
+                  Padding="24,48,24,24">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="ACCOUNT &amp; PREFERENCES" Style="{StaticResource SectionTitle}"
+                           TextColor="#9BA3C2"/>
+                    <Label Text="Settings" Style="{StaticResource PageTitle}"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Padding="20,16" Spacing="16">
+
+                <!-- Profile card -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+
+                        <!-- Avatar row -->
+                        <HorizontalStackLayout Spacing="16">
+                            <Border BackgroundColor="{StaticResource Primary}"
+                                    WidthRequest="60" HeightRequest="60"
+                                    StrokeThickness="0">
+                                <Label Text="{Binding Username, StringFormat='{0:0}'}"
+                                       FontSize="22" FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout VerticalOptions="Center" Spacing="4">
+                                <Label Text="{Binding Username}"
+                                       FontSize="18" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                                <Label Text="Registered user"
+                                       Style="{StaticResource MutedText}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <BoxView Style="{StaticResource Divider}"/>
+
+                        <!-- Stats row -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                                    StrokeThickness="0" Padding="16,12">
+                                <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                    <Label Text="{Binding StreakDays}"
+                                           FontSize="30" FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           TextColor="{StaticResource Primary}"/>
+                                    <Label Text="🔥 Day Streak" FontSize="12"
+                                           HorizontalOptions="Center"
+                                           TextColor="{StaticResource TextSecondary}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{AppThemeBinding Light=#E8EAFF, Dark=#252860}"
+                                    StrokeThickness="0" Padding="16,12">
+                                <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                    <Label Text="{Binding VersesRead}"
+                                           FontSize="30" FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           TextColor="{StaticResource Primary}"/>
+                                    <Label Text="📖 Verses Read" FontSize="12"
+                                           HorizontalOptions="Center"
+                                           TextColor="{StaticResource TextSecondary}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Notifications card -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="🔔" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Daily Reminder" FontSize="17" FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                        </HorizontalStackLayout>
+
+                        <BoxView Style="{StaticResource Divider}"/>
+
+                        <!-- Toggle row -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
+                                <Label Text="Enable verse reminders" FontSize="15"
+                                       TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                                <Label Text="Get a daily notification to read your verse"
+                                       Style="{StaticResource MutedText}"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1" IsToggled="{Binding NotificationsEnabled}"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- Time picker -->
+                        <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding NotificationsEnabled}">
+                            <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
+                                <Label Text="Reminder time" FontSize="15"
+                                       TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+                                <Label Text="Choose when to receive your daily verse"
+                                       Style="{StaticResource MutedText}"/>
+                            </VerticalStackLayout>
+                            <TimePicker Grid.Column="1" Time="{Binding NotificationTime}"
+                                        Format="hh:mm tt"
+                                        TextColor="{StaticResource Primary}"
+                                        VerticalOptions="Center"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                   HorizontalOptions="Center"/>
+
+                <Button Text="💾  Save Settings" Command="{Binding SaveCommand}"/>
+
+                <BoxView Style="{StaticResource Divider}"/>
+
+                <Button Text="Sign Out" Command="{Binding LogoutCommand}"
+                        Style="{StaticResource DangerButton}"/>
+
+                <Label Text="Daily Bible Verse  ·  6002CEM  ·  v1.0"
+                       FontSize="11" HorizontalOptions="Center" Margin="0,8,0,24"
+                       TextColor="{StaticResource TextSecondary}"/>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

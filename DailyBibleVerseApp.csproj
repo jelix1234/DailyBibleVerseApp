@@ -1,0 +1,80 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DailyBibleVerseApp</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+		<!-- Suppress MVVM Toolkit AOT warning — only relevant for WinRT/UWP, not Android/iOS -->
+		<NoWarn>$(NoWarn);MVVMTK0034</NoWarn>
+    <ApplicationTitle>Daily Bible Verse</ApplicationTitle>
+    <ApplicationId>com.dailybibleverse.app</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1A237E"/>
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#1A237E" BaseSize="128,128"/>
+    <MauiImage Include="Resources\Images\*"/>
+    <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185"/>
+    <MauiFont Include="Resources\Fonts\*"/>
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- MVVM toolkit — provides ObservableObject, RelayCommand, [ObservableProperty] -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+    <!-- SQLite local database -->
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172"/>
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8"/>
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.11"/>
+    <!-- Push notifications -->
+    <PackageReference Include="Plugin.LocalNotification" Version="11.1.4"/>
+    <!-- JSON serialisation for bible-api.com responses -->
+    <PackageReference Include="System.Text.Json" Version="9.0.3"/>
+    <!-- MAUI core -->
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40"/>
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.40"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3"/>
+  </ItemGroup>
+
+  <!-- Firebase only needed on Android (cloud auth integration) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0"/>
+    <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="118.5.0.4"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Views -->
+    <Compile Update="Views\LoginPage.xaml.cs">        <DependentUpon>LoginPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\MainPage.xaml.cs">         <DependentUpon>MainPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\DailyVersePage.xaml.cs">   <DependentUpon>DailyVersePage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\FavoritesPage.xaml.cs">    <DependentUpon>FavoritesPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\NotesPage.xaml.cs">        <DependentUpon>NotesPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\SettingsPage.xaml.cs">     <DependentUpon>SettingsPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\SignupPage.xaml.cs">       <DependentUpon>SignupPage.xaml</DependentUpon></Compile>
+    <Compile Update="Views\ViewNotesPage.xaml.cs">    <DependentUpon>ViewNotesPage.xaml</DependentUpon></Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiXaml Update="Views\LoginPage.xaml">        <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\MainPage.xaml">         <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\DailyVersePage.xaml">   <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\FavoritesPage.xaml">    <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\NotesPage.xaml">        <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\SettingsPage.xaml">     <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\SignupPage.xaml">       <Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\ViewNotesPage.xaml">    <Generator>MSBuild:Compile</Generator></MauiXaml>
+  </ItemGroup>
+
+</Project>

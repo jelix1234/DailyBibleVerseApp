@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ── Primary Brand ───────────────────────────────────────────────── -->
+    <Color x:Key="Primary">#2E3192</Color>
+    <Color x:Key="PrimaryDark">#1A1D6E</Color>
+    <Color x:Key="PrimaryLight">#5C60C6</Color>
+    <Color x:Key="Accent">#F5A623</Color>
+    <Color x:Key="AccentLight">#FFD080</Color>
+
+    <!-- ── Backgrounds ─────────────────────────────────────────────────── -->
+    <Color x:Key="BgLight">#F0F2FF</Color>
+    <Color x:Key="BgDark">#0F1035</Color>
+    <Color x:Key="CardLight">#FFFFFF</Color>
+    <Color x:Key="CardDark">#1C1F52</Color>
+    <Color x:Key="SurfaceLight">#E8EAFF</Color>
+    <Color x:Key="SurfaceDark">#252860</Color>
+
+    <!-- ── Text ────────────────────────────────────────────────────────── -->
+    <Color x:Key="TextPrimary">#1A1D4E</Color>
+    <Color x:Key="TextPrimaryDark">#E8EAFF</Color>
+    <Color x:Key="TextSecondary">#6B7280</Color>
+    <Color x:Key="TextSecondaryDark">#9BA3C2</Color>
+    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+
+    <!-- ── Borders ─────────────────────────────────────────────────────── -->
+    <Color x:Key="BorderLight">#D4D8FF</Color>
+    <Color x:Key="BorderDark">#353A80</Color>
+
+    <!-- ── Semantic ────────────────────────────────────────────────────── -->
+    <Color x:Key="Error">#DC2626</Color>
+    <Color x:Key="ErrorBg">#FEE2E2</Color>
+    <Color x:Key="Success">#16A34A</Color>
+    <Color x:Key="SuccessBg">#DCFCE7</Color>
+    <Color x:Key="Gold">#F5A623</Color>
+    <Color x:Key="GoldLight">#FFF3CD</Color>
+
+</ResourceDictionary>

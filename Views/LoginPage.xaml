@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DailyBibleVerseApp.ViewModels"
+             xmlns:conv="clr-namespace:DailyBibleVerseApp.Converters"
+             x:Class="DailyBibleVerseApp.Views.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBool"/>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Hero banner -->
+            <Grid HeightRequest="260"
+                  BackgroundColor="{AppThemeBinding Light=#2E3192, Dark=#1A1D6E}">
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                                     Spacing="10" Padding="32,0">
+                    <!-- Cross icon using text -->
+                    <Border BackgroundColor="#FFFFFF22" WidthRequest="80" HeightRequest="80"
+                            HorizontalOptions="Center" StrokeThickness="0">
+                        <Label Text="✝" FontSize="40" TextColor="White"
+                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <Label Text="Daily Bible Verse" FontSize="28" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="Nourish your soul, one verse at a time"
+                           FontSize="14" TextColor="#C5CAF5"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- White card panel -->
+            <Border Margin="24,-24,24,24" Padding="24"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1F52}"
+                    StrokeThickness="0">
+                <VerticalStackLayout Spacing="16">
+
+                    <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=#1A1D4E, Dark=#E8EAFF}"/>
+
+                    <!-- Error banner -->
+                    <Border BackgroundColor="#FEE2E2" Padding="12,10" IsVisible="{Binding HasError}"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="⚠" FontSize="14" TextColor="#DC2626" VerticalOptions="Center"/>
+                            <Label Text="{Binding ErrorMessage}" TextColor="#DC2626" FontSize="13"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Username -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="USERNAME" Style="{StaticResource SectionTitle}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry Placeholder="Enter your username" Text="{Binding Username}"
+                                   ReturnType="Next" Margin="8,0"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Email (register only) -->
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding IsRegistering}">
+                        <Label Text="EMAIL (OPTIONAL)" Style="{StaticResource SectionTitle}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry Placeholder="your@email.com" Keyboard="Email"
+                                   Margin="8,0"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Password -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="PASSWORD" Style="{StaticResource SectionTitle}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry Placeholder="••••••••" Text="{Binding Password}"
+                                   IsPassword="True" ReturnType="Done" Margin="8,0"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                       HorizontalOptions="Center"/>
+
+                    <!-- Primary action button -->
+                    <Button Text="Sign In" Command="{Binding LoginCommand}"
+                            IsVisible="{Binding IsRegistering, Converter={StaticResource InverseBool}}"
+                            IsEnabled="{Binding IsNotBusy}"/>
+
+                    <Button Text="Create Account" Command="{Binding RegisterCommand}"
+                            IsVisible="{Binding IsRegistering}"
+                            IsEnabled="{Binding IsNotBusy}"/>
+
+                    <!-- Toggle link -->
+                    <Button
+                        Text="New here? Create an account →"
+                        Command="{Binding ToggleModeCommand}"
+                        IsVisible="{Binding IsRegistering, Converter={StaticResource InverseBool}}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}"
+                        FontSize="14" FontAttributes="None"
+                        HorizontalOptions="Center"/>
+
+                    <Button
+                        Text="Already have an account? Sign in →"
+                        Command="{Binding ToggleModeCommand}"
+                        IsVisible="{Binding IsRegistering}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}"
+                        FontSize="14" FontAttributes="None"
+                        HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
